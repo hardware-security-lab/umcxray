@@ -83,7 +83,7 @@ CF_TARGET(kmod, CF_HELP_STRING("Build the kernel module")) {
     char** objs = CF_MAPA(glob.p, glob.c, CF_MAP_EXT("o"), CF_MAP_DIRS(""));
     CF_WRITE(
         "build/kmod/Makefile",
-        "obj-m += %s\natlxray-y := %s",
+        "ccflags-y := -I$(PWD)/includes\nobj-m += %s\natlxray-y := %s",
         CF_MAP(KMOD_NAME, CF_MAP_EXT("o")),
         CF_JOIN(objs, " ", glob.c)
     );
