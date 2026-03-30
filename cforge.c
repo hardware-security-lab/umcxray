@@ -7,7 +7,7 @@
 #define KMOD_NAME "atlxray.ko"
 
 CF_CONFIG(release) {
-    CF_SET_ENV(cflags, "-O2");
+    CF_SET_ENV(cflags, "-O2 -Iincludes/");
     CF_SET_ENV(ldflags, "");
 }
 
