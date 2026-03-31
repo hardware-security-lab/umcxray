@@ -7,6 +7,8 @@
 
 #include "atlxray.h"
 #include "addr_resolver.h"
+#include "umc.h"
+
 
 static struct atl_regs regs = { 0 };
 static struct debugfs_blob_wrapper regs_wrapper = (struct debugfs_blob_wrapper) {
@@ -21,7 +23,33 @@ static int __init init(void)
 {
     pr_info("%s: loading...\n", KBUILD_MODNAME);
 
-    void *addr = kprobe_symbol_lookup("do_sys_open");
+    get_umc_info_mi300_t get_umc = (get_umc_info_mi300_t) kprobe_symbol_lookup("get_umc_info_mi300");
+    if (get_umc == NULL)
+    {
+        pr_err("%s: kprobe_symbol_lookup(): get_umc_info_mi300() not found!", KBUILD_MODNAME);
+        return 1;
+    }
+
+    if (get_umc() != 0)
+    {
+        pr_err("%s: get_umc_info_mi300(): Failed", KBUILD_MODNAME);
+        return 1;
+    }
+
+    struct atl_addr_hash *addr_hash = (struct atl_addr_hash *) kprobe_symbol_lookup("addr_hash");
+    struct atl_bit_shifts *bit_shifts = (struct atl_bit_shifts *) kprobe_symbol_lookup("bit_shifts");
+
+    if (addr_hash == NULL)
+    {
+        pr_err("%s: addr_hash: NULL", KBUILD_MODNAME);
+        return 1;
+    }
+
+    if (bit_shifts == NULL)
+    {
+        pr_err("%s: bit_shifts: NULL", KBUILD_MODNAME);
+        return 1;
+    }
 
     root = debugfs_create_dir("atlxray", NULL);
     if (IS_ERR(root))
