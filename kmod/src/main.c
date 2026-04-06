@@ -3,11 +3,9 @@
 #include <sys/ddi.h>
 #include <sys/sunddi.h>
 #include <sys/modctl.h>
-#include <sys/cmn_err.h>
 
 #include "umcxray.h"
-
-#define MODTAG MODNAME ": "
+#include "uxlog.h"
 
 static struct modlmisc modlmisc = {
     &mod_miscops,
@@ -27,7 +25,7 @@ _init(void)
     error = mod_install(&modlinkage);
     if (error == 0)
     {
-        cmn_err(CE_NOTE, MODTAG "UMCXray loaded!");
+        INFO("UMCXray loaded!");
     }
     return (error);
 }
@@ -39,7 +37,7 @@ _fini(void)
     error = mod_remove(&modlinkage);
     if (error == 0)
     {
-        cmn_err(CE_NOTE, MODTAG "UMCXray unloaded!");
+        INFO("UMCXray unloaded!");
     }
     return (error);
 }
