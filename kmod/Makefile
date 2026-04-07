@@ -7,7 +7,7 @@ TARGET = $(BUILD_DIR)/$(MODNAME)
 CC = gcc
 LD = ld
 
-CFLAGS = -m64 -O2 -D_KERNEL -DDEBUG -fPIC -I/usr/include/sys -I$(INC_DIR)
+CFLAGS = -m64 -O2 -D_KERNEL -DDEBUG -mcmodel=kernel -I/usr/include/sys -I$(INC_DIR)
 LDFLAGS = -r -ztype=kmod
 
 include objs.mk
