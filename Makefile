@@ -1,12 +1,13 @@
 SRC_DIR = src
-BUILD_DIR = ../../build
-INC_DIR = ../includes
+BUILD_DIR = build
+INC_DIR = includes
 
 PROG = umcxray_reader
 TARGET = $(BUILD_DIR)/$(PROG)
 
 CC = gcc
 CFLAGS = -O2 -Wall -Wextra -I$(INC_DIR)
+LIBS = -lnvpair
 
 include objs.mk
 
@@ -16,7 +17,7 @@ $(TARGET): $(OBJS)
 	@if [ ! -d $(BUILD_DIR) ]; then \
 		mkdir -p $(BUILD_DIR); \
 	fi
-	$(CC) -o $@ $(OBJS) $(LIBS)
+	$(CC) $(LIBS) -o $@ $(OBJS) $(LIBS)
 
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
 	@if [ ! -d $(BUILD_DIR) ]; then \
@@ -28,5 +29,5 @@ clean:
 	rm -rf $(BUILD_DIR)
 
 run:
-	./$(TARGET)
+	pfexec ./$(TARGET)
 
